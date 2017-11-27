@@ -181,7 +181,6 @@ class Wp_Social_Pane {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
 		$options 	= get_option( $this->plugin_name . '_options', $plugin_public->getDefaultOption() );
-		print_r($options);
 		$where = $options['where_option'];
 		switch ( $where ) {
 			case 'below_title':

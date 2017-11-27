@@ -74,6 +74,7 @@ class Wp_Social_Pane_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-social-pane-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'font-awesome-admin', '//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' );
 		wp_enqueue_style( 'wp-color-picker' );
 	}
 
