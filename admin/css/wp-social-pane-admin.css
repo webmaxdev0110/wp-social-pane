@@ -2,3 +2,33 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+ #display-order-sortable {
+   margin:0px;
+   padding:10px;
+ }
+
+ #display-order-sortable li {
+   float:left;
+   margin: 3px;
+   width: 50px;
+   height: 50px;
+   border: 1px solid #999;
+   text-align: center;
+ }
+
+ #display-order-sortable li i {
+   line-height: 50px;
+   cursor: pointer;
+ }
+
+ .social-option-item {
+   margin-right: 10px;
+ }
+
+ .social-option-item input {
+   line-height: 40px;
+ }
+ .social-option-item i {
+   margin-left: 10px;
+ }

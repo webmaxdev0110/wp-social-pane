@@ -74,7 +74,43 @@ class Wp_Social_Pane_Public {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-social-pane-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' );
 
+		$options = get_option( $this->plugin_name . '_options' );
+		$display_size = $options['display_size'];
+		$icon_colors = $options['social-btn-color'];
+		$custom_css = "
+				.social-pane-section .social-pane-list li a{
+					font-size: {$display_size}px;
+				}
+
+				.social-pane-section .social-pane-list li a.facebook {
+					color: {$icon_colors['facebook']};
+				}
+
+				.social-pane-section .social-pane-list li a.twitter {
+					color: {$icon_colors['twitter']};
+				}
+
+				.social-pane-section .social-pane-list li a.google {
+					color: {$icon_colors['google']};
+				}
+
+				.social-pane-section .social-pane-list li a.pinterest {
+					color: {$icon_colors['pinterest']};
+				}
+
+				.social-pane-section .social-pane-list li a.linkedin {
+					color: {$icon_colors['linkedin']};
+				}
+
+				.social-pane-section .social-pane-list li a.whatsapp {
+					color: {$icon_colors['whatsapp']};
+				}";
+
+		wp_register_style( 'social-pane-custom-style', false );
+		wp_enqueue_style( 'social-pane-custom-style' );
+		wp_add_inline_style( 'social-pane-custom-style', $custom_css );		
 	}
 
 	/**
@@ -97,7 +133,72 @@ class Wp_Social_Pane_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-social-pane-public.js', array( 'jquery' ), $this->version, false );
+	//	wp_enqueue_script( 'whatsapp', plugin_dir_url( __FILE__ ) . 'js/whatsapp.js');
+	}
 
+	/**
+	 * Register the JavaScript for the public-facing side of the site.
+	 *
+	 * @since    1.0.0
+	 */
+	public function render_social_pane() {
+		$options = get_option( $this->plugin_name . '_options' );
+		$post_types = $options['post-type'];
+		if ( in_array(get_post_type(), $post_types) && is_singular( $post_types ) && $options ) {
+			ob_start();
+			include_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/wp-social-pane-public-display.php';
+			$output = ob_get_contents();
+			ob_end_clean();
+			return $output;
+		}
+	}
+
+	/**
+	 * Filter title to add social pane
+	 *
+	 * @since    1.0.0
+	 */
+	public function filter_below_title($title) {
+		if ( is_singular() && in_the_loop() ) {
+			return $title . $this -> render_social_pane();
+		} else {
+			return $title;
+		}
+	}
+
+	/**
+	 * Filter content to add social pane
+	 *
+	 * @since    1.0.0
+	 */
+	public function filter_after_content($content) {
+		if ( is_singular() && in_the_loop() ) {
+			return $content . $this -> render_social_pane();
+		} else {
+			return $content;
+		}
+	}
+
+	/**
+	 * Filter featured image to add social pane
+	 *
+	 * @since    1.0.0
+	 */
+	public function filter_inside_image($content) {
+		if ( is_singular() && in_the_loop() ) {
+			return $content . $this -> render_social_pane();
+		} else {
+			return $content;
+		}
+	}
+
+	/**
+	 * Show left floated
+	 *
+	 * @since    1.0.0
+	 */
+	public function filter_display_left() {
+		echo $this -> render_social_pane();
 	}
 
 }
