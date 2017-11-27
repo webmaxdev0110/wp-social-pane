@@ -76,41 +76,43 @@ class Wp_Social_Pane_Public {
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-social-pane-public.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' );
 
-		$options = get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
-		$display_size = $options['display_size'];
-		$icon_colors = $options['social-btn-color'];
-		$custom_css = "
-				.social-pane-section .social-pane-list li a{
-					font-size: {$display_size}px;
-				}
+		$options = get_option( $this->plugin_name . '_options' );
+		if ($options) {
+			$display_size = $options['display_size'];
+			$icon_colors = $options['social-btn-color'];
+			$custom_css = "
+					.social-pane-section .social-pane-list li a{
+						font-size: {$display_size}px;
+					}
 
-				.social-pane-section .social-pane-list li a.facebook {
-					color: {$icon_colors['facebook']};
-				}
+					.social-pane-section .social-pane-list li a.facebook {
+						color: {$icon_colors['facebook']};
+					}
 
-				.social-pane-section .social-pane-list li a.twitter {
-					color: {$icon_colors['twitter']};
-				}
+					.social-pane-section .social-pane-list li a.twitter {
+						color: {$icon_colors['twitter']};
+					}
 
-				.social-pane-section .social-pane-list li a.google {
-					color: {$icon_colors['google']};
-				}
+					.social-pane-section .social-pane-list li a.google {
+						color: {$icon_colors['google']};
+					}
 
-				.social-pane-section .social-pane-list li a.pinterest {
-					color: {$icon_colors['pinterest']};
-				}
+					.social-pane-section .social-pane-list li a.pinterest {
+						color: {$icon_colors['pinterest']};
+					}
 
-				.social-pane-section .social-pane-list li a.linkedin {
-					color: {$icon_colors['linkedin']};
-				}
+					.social-pane-section .social-pane-list li a.linkedin {
+						color: {$icon_colors['linkedin']};
+					}
 
-				.social-pane-section .social-pane-list li a.whatsapp {
-					color: {$icon_colors['whatsapp']};
-				}";
+					.social-pane-section .social-pane-list li a.whatsapp {
+						color: {$icon_colors['whatsapp']};
+					}";
 
-		wp_register_style( 'social-pane-custom-style', false );
-		wp_enqueue_style( 'social-pane-custom-style' );
-		wp_add_inline_style( 'social-pane-custom-style', $custom_css );		
+			wp_register_style( 'social-pane-custom-style', false );
+			wp_enqueue_style( 'social-pane-custom-style' );
+			wp_add_inline_style( 'social-pane-custom-style', $custom_css );	
+		}	
 	}
 
 	/**
@@ -142,15 +144,16 @@ class Wp_Social_Pane_Public {
 	 * @since    1.0.0
 	 */
 	public function render_social_pane($shortcode = false) {
-		$options = get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
-		
-		$post_types = $options['post-type'];
-		if ( in_array(get_post_type(), $post_types) && is_singular( $post_types ) && $options ) {
-			ob_start();
-			include( plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/wp-social-pane-public-display.php' );
-			$output = ob_get_contents();
-			ob_end_clean();
-			return $output;
+		$options = get_option( $this->plugin_name . '_options' );
+		if ($options) {
+			$post_types = $options['post-type'];
+			if ( in_array(get_post_type(), $post_types) && is_singular( $post_types ) && $options ) {
+				ob_start();
+				include( plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/wp-social-pane-public-display.php' );
+				$output = ob_get_contents();
+				ob_end_clean();
+				return $output;
+			}
 		}
 	}
 
