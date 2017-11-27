@@ -180,7 +180,8 @@ class Wp_Social_Pane {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
-		$options 	= get_option( $this->plugin_name . '_options' );
+		$options 	= get_option( $this->plugin_name . '_options', $plugin_public->getDefaultOption() );
+		
 		$where = $options['where_option'];
 		switch ( $where ) {
 			case 'below_title':
@@ -195,7 +196,9 @@ class Wp_Social_Pane {
 			case 'inside_feature_image':
 				$this->loader->add_filter('post_thumbnail_html', $plugin_public, 'filter_inside_image');
 				break;
-		} 
+		}
+
+		add_shortcode('wp_social_pane', array($plugin_public, 'render_shortcode'));
 	}
 
 	/**

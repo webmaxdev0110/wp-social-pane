@@ -257,7 +257,7 @@ class Wp_Social_Pane_Admin {
 	 */
 	public function display_section_option_field() {
 
-		$options 	= get_option( $this->plugin_name . '_options' );
+		$options 	= get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
 		$option 	= array();
 
 		if ( ! empty( $options['post-type'] ) ) {
@@ -289,7 +289,7 @@ class Wp_Social_Pane_Admin {
 	 */
 	public function social_buttons_option_field() {
 
-		$options 	= get_option( $this->plugin_name . '_options' );
+		$options 	= get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
 		$option 	= array();
 		
 		if ( ! empty( $options['social-option'] ) ) {
@@ -320,7 +320,7 @@ class Wp_Social_Pane_Admin {
 	 * @since		1.0.0
 	 */
 	public function display_size_option_field() {
-		$options 	= get_option( $this->plugin_name . '_options' );
+		$options 	= get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
 		
 		if ( ! empty( $options['display_size'] ) ) {
 			$option = $options['display_size'];
@@ -349,7 +349,7 @@ class Wp_Social_Pane_Admin {
 	 * @since		1.0.0
 	 */
 	public function display_color_option_field() {
-		$options 	= get_option( $this->plugin_name . '_options' );
+		$options 	= get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
 		$option 	= array();
 		
 		if ( ! empty( $options['social-btn-color'] ) ) {
@@ -392,7 +392,7 @@ class Wp_Social_Pane_Admin {
 	 * @since		1.0.0
 	 */
 	public function display_order_option_field() {
-		$options 	= get_option( $this->plugin_name . '_options' );
+		$options 	= get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
 		$option 	= array();
 
 		$social_icons = array(
@@ -428,7 +428,7 @@ class Wp_Social_Pane_Admin {
 	 * @since		1.0.0
 	 */
 	public function display_where_option_field() {
-		$options 	= get_option( $this->plugin_name . '_options' );
+		$options 	= get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
 		
 		if ( ! empty( $options['where_option'] ) ) {
 			$option = $options['where_option'];
@@ -451,5 +451,28 @@ class Wp_Social_Pane_Admin {
 		<?php } ?>
 		</select>
 	<?php	}
+
+	/**
+	 * Get Default Option value
+	 * 
+	 * @since		1.0.0
+	 */
+	public function getDefaultOption() {
+		return array(
+				"post-type" 		=> array ("post", "page"),
+				"social-option" => array ("facebook", "twitter", "google", "pinterest", "linkedin", "whatsapp"),
+				"display_size" 	=>	"16",
+				"social-btn-color"=> array(
+					"facebook"	=> "#3b5999",
+					"twitter" 	=> "#55acee",
+					"google" 		=> "#dd4b39",
+					"pinterest" => "#bd081c",
+					"linkedin" 	=> "#0077b5",
+					"whatsapp" 	=> "#25d366"
+				),
+				"display-order" => array("facebook", "twitter", "google", "pinterest", "linkedin", "whatsapp"),
+				"where_option"  => "below_title"
+		);
+	}
 
 }

@@ -76,7 +76,7 @@ class Wp_Social_Pane_Public {
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-social-pane-public.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' );
 
-		$options = get_option( $this->plugin_name . '_options' );
+		$options = get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
 		$display_size = $options['display_size'];
 		$icon_colors = $options['social-btn-color'];
 		$custom_css = "
@@ -141,15 +141,27 @@ class Wp_Social_Pane_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function render_social_pane() {
-		$options = get_option( $this->plugin_name . '_options' );
+	public function render_social_pane($shortcode = false) {
+		$options = get_option( $this->plugin_name . '_options', $this->getDefaultOption() );
+		
 		$post_types = $options['post-type'];
 		if ( in_array(get_post_type(), $post_types) && is_singular( $post_types ) && $options ) {
 			ob_start();
-			include_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/wp-social-pane-public-display.php';
+			include( plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/wp-social-pane-public-display.php' );
 			$output = ob_get_contents();
 			ob_end_clean();
 			return $output;
+		}
+	}
+
+	/**
+	 * Filter title to add social pane
+	 *
+	 * @since    1.0.0
+	 */
+	public function render_shortcode() {
+		if ( is_singular() && in_the_loop() ) {
+			return $this -> render_social_pane(true);
 		}
 	}
 
@@ -199,6 +211,29 @@ class Wp_Social_Pane_Public {
 	 */
 	public function filter_display_left() {
 		echo $this -> render_social_pane();
+	}
+
+	/**
+	 * Get Default Option value
+	 * 
+	 * @since		1.0.0
+	 */
+	public function getDefaultOption() {
+		return array(
+				"post-type" 		=> array ("post", "page"),
+				"social-option" => array ("facebook", "twitter", "google", "pinterest", "linkedin", "whatsapp"),
+				"display_size" 	=>	"16",
+				"social-btn-color"=> array(
+					"facebook"	=> "#3b5999",
+					"twitter" 	=> "#55acee",
+					"google" 		=> "#dd4b39",
+					"pinterest" => "#bd081c",
+					"linkedin" 	=> "#0077b5",
+					"whatsapp" 	=> "#25d366"
+				),
+				"display-order" => array("facebook", "twitter", "google", "pinterest", "linkedin", "whatsapp"),
+				"where_option"  => "below_title"
+		);
 	}
 
 }

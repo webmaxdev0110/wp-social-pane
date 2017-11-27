@@ -12,11 +12,14 @@
  * @subpackage Wp_Social_Pane/public/partials
  */
 
-$options 	= get_option( $this->plugin_name . '_options' );
 $social_icons = $options['social-option'];
 $social_order = $options['display-order'];
 $where = $options['where_option'];
-$display_color = $options['social-btn-color']; ?>
+$display_color = $options['social-btn-color']; 
+
+if ($shortcode) {
+  $where = '';
+} ?>
 
 <!-- Social Pane Start -->
 <div class="social-pane-section <?php echo $where; ?>">
